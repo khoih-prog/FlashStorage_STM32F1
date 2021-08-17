@@ -334,7 +334,7 @@ The following is the sample terminal output when running example [Ethernet_STM32
 
 ```
 Start EEPROM_get on BLUEPILL_F103C8
-FlashStorage_STM32F1 v1.0.0
+FlashStorage_STM32F1 v1.0.1
 EEPROM length: 1019
 Start Flash Address: 0x800F800
 [FLASH] REGISTERED_NUMBER_FLASH_SECTORS (KB) = 64
@@ -354,7 +354,7 @@ Reset to see how you can retrieve the values by using EEPROM_get!
 
 ```
 Start EEPROM_get on BLUEPILL_F103C8
-FlashStorage_STM32F1 v1.0.0
+FlashStorage_STM32F1 v1.0.1
 EEPROM length: 1019
 Start Flash Address: 0x800F800
 [FLASH] REGISTERED_NUMBER_FLASH_SECTORS (KB) = 64
@@ -379,7 +379,7 @@ The following is the sample terminal output when running example [Ethernet_STM32
 
 ```
 Start FlashStoreAndRetrieve on BLUEPILL_F103C8
-FlashStorage_STM32F1 v1.0.0
+FlashStorage_STM32F1 v1.0.1
 EEPROM length: 1019
 Start Flash Address: 0x800FC00
 [FLASH] REGISTERED_NUMBER_FLASH_SECTORS (KB) = 64
@@ -393,7 +393,7 @@ Done writing to emulated EEPROM. You can reset now
 ```
 
 Start FlashStoreAndRetrieve on BLUEPILL_F103C8
-FlashStorage_STM32F1 v1.0.0
+FlashStorage_STM32F1 v1.0.1
 EEPROM length: 1019
 Start Flash Address: 0x800FC00
 [FLASH] REGISTERED_NUMBER_FLASH_SECTORS (KB) = 64
@@ -408,7 +408,7 @@ Done writing to emulated EEPROM. You can reset now
 
 ```
 Start EEPROM_write on BLUEPILL_F103C8
-FlashStorage_STM32F1 v1.0.0
+FlashStorage_STM32F1 v1.0.1
 EEPROM length: 1019
 Start Flash Address: 0x801F800
 [FLASH] REGISTERED_NUMBER_FLASH_SECTORS (KB) = 128
@@ -430,7 +430,7 @@ Done writing emulated EEPROM. Time spent (ms) = 0
 
 ```
 Start EmulatedEEPROM on BLUEPILL_F103C8
-FlashStorage_STM32F1 v1.0.0
+FlashStorage_STM32F1 v1.0.1
 EEPROM length: 1019
 Start Flash Address: 0x801FC00
 [FLASH] REGISTERED_NUMBER_FLASH_SECTORS (KB) = 128
@@ -444,7 +444,7 @@ Done writing to emulated EEPROM. You can reset now to test
 
 ```
 Start EmulatedEEPROM on BLUEPILL_F103C8
-FlashStorage_STM32F1 v1.0.0
+FlashStorage_STM32F1 v1.0.1
 EEPROM length: 1019
 Start Flash Address: 0x801FC00
 [FLASH] REGISTERED_NUMBER_FLASH_SECTORS (KB) = 128

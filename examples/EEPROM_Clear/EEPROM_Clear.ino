@@ -22,11 +22,12 @@
   You should have received a copy of the GNU Lesser General Public License along with this library.
   If not, see (https://www.gnu.org/licenses/)
 
-  Version: 1.0.0
+  Version: 1.0.1
 
   Version Modified By   Date        Comments
   ------- -----------  ----------   -----------
   1.0.0   K Hoang      16/08/2021  Initial coding to support to STM32F1
+  1.0.1   K Hoang      16/08/2021  Fix mistake in initial releases
  ******************************************************************************************************************************************/
 
 // Use 0-2. Larger for more debugging messages
