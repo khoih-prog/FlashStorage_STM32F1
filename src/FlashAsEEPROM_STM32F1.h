@@ -38,8 +38,6 @@
   #error This code is intended to run on STM32F1/F3 platform! Please check your Tools->Board setting.  
 #endif
 
-#include "FlashStorage_STM32F1.h"
-
 #ifndef EEPROM_EMULATION_SIZE
   #define EEPROM_EMULATION_SIZE ( 1024 - sizeof(bool) - sizeof(uint32_t) )
 #endif

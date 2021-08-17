@@ -123,5 +123,7 @@ private:
 };
 
 #include "FlashStorage_STM32F1.hpp"
+
+#include <FlashAsEEPROM_STM32F1.h>
       
 #endif    //#ifndef FlashStorage_STM32F1_h
