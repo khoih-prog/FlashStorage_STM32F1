@@ -17,6 +17,7 @@
     * [STM32F1xx](#stm32f1xx)
     * [STM32F3xx](#stm32f3xx)
 * [Changelog](#changelog)
+  * [Releases v1.0.1](#releases-v101)
   * [Initial Releases v1.0.0](#initial-releases-v100)
 * [Prerequisites](#prerequisites)
 * [Installation](#installation)
@@ -122,6 +123,10 @@ Currently, the library supports both new [**STM32 core v2.0.0**](https://github.
 ---
 
 ## Changelog
+
+### Releases v1.0.1
+
+1. Fix mistake in initial releases
 
 
 ### Initial Releases v1.0.0
@@ -484,6 +489,10 @@ Sometimes, the library will only work if you update the board core to the latest
 ---
 
 ## Releases
+
+### Releases v1.0.1
+
+1. Fix mistake in initial releases
 
 ### Initial Releases v1.0.0
 
