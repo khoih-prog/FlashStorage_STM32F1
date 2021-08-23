@@ -53,6 +53,9 @@
   * [4. EmulatedEEPROM on BLUEPILL_F103C8 with 128KB Flash](#4-emulatedeeprom-on-bluepill_f103c8-with-128kb-flash)
     * [4.1. First Start](#41-first-start)
     * [4.2. After reset](#42-after-reset)
+  * [5. FlashStoreAndRetrieve on GENERIC_F103RCTX with 256KB Flash](#5-flashstoreandretrieve-on-generic_f103rctx-with-256kb-flash)
+    * [5.1. First Start](#51-first-start)
+    * [5.2. After reset](#52-after-reset)
 * [FAQ](#faq)
   * [Can I use a single object to store more stuff?](#can-i-use-a-single-object-to-store-more-stuff)
   * [The content of the FlashStorage is erased each time a new sketch is uploaded?](#the-content-of-the-flashstorage-is-erased-each-time-a-new-sketch-is-uploaded)
@@ -328,7 +331,7 @@ void loop()
 
 ### 1. EEPROM_get on BLUEPILL_F103C8 with 64KB Flash
 
-The following is the sample terminal output when running example [Ethernet_STM32_LAN8720](https://github.com/khoih-prog/Ethernet_Manager_STM32/tree/main/examples/Ethernet_STM32_LAN8720) on STM32F4 BLACK_F407VE with LAN8720 Ethernet using STM32Ethernet Library.
+The following is the sample terminal output when running example [EEPROM_get](examples/EEPROM_get) on STM32F1 BLUEPILL_F103C8 with 64KB Flash
 
 #### 1.1 First Start
 
@@ -373,7 +376,7 @@ Name: Working!
 
 ### 2. FlashStoreAndRetrieve on BLUEPILL_F103C8 with 64KB Flash
 
-The following is the sample terminal output when running example [Ethernet_STM32_LAN8720](https://github.com/khoih-prog/Ethernet_Manager_STM32/tree/main/examples/Ethernet_STM32_LAN8720) on STM32F4 BLACK_F407VE with LAN8720 Ethernet using STM32Ethernet Library.
+The following is the sample terminal output when running example [FlashStoreAndRetrieve](examples/FlashStoreAndRetrieve) on STM32F1 BLUEPILL_F103C8 with 64KB Flash
 
 #### 2.1 First Start
 
@@ -406,6 +409,9 @@ Done writing to emulated EEPROM. You can reset now
 
 ### 3. EEPROM_write on BLUEPILL_F103C8 with 128KB Flash
 
+The following is the sample terminal output when running example [EEPROM_write](examples/EEPROM_write) on STM32F1 BLUEPILL_F103C8 with 128KB Flash
+
+
 ```
 Start EEPROM_write on BLUEPILL_F103C8
 FlashStorage_STM32F1 v1.0.1
@@ -425,6 +431,7 @@ Done writing emulated EEPROM. Time spent (ms) = 0
 
 ### 4. EmulatedEEPROM on BLUEPILL_F103C8 with 128KB Flash
 
+The following is the sample terminal output when running example [EmulatedEEPROM](examples/EmulatedEEPROM) on STM32F1 BLUEPILL_F103C8 with 128KB Flash
 
 #### 4.1 First Start
 
@@ -456,6 +463,37 @@ Clearing WRITTEN_SIGNATURE for next try
 Done clearing signature in emulated EEPROM. You can reset now
 ```
 
+---
+
+### 5. FlashStoreAndRetrieve on GENERIC_F103RCTX with 256KB Flash
+
+The following is the sample terminal output when running example [FlashStoreAndRetrieve](examples/FlashStoreAndRetrieve) on STM32F1 GENERIC_F103RCTX with 2564KB Flash
+
+#### 5.1 First Start
+
+```
+Start FlashStoreAndRetrieve on GENERIC_F103RCTX
+FlashStorage_STM32F1 v1.0.0
+EEPROM length: 1019
+Start Flash Address: 0x803F800
+[FLASH] REGISTERED_NUMBER_FLASH_SECTORS (KB) = 256
+[FLASH] USING_FLASH_SECTOR_NUMBER =  254
+Number = 0xFFFFFFFF
+Done writing to emulated EEPROM. You can reset now
+```
+
+#### 5.2 After reset
+
+```
+Start FlashStoreAndRetrieve on GENERIC_F103RCTX
+FlashStorage_STM32F1 v1.0.0
+EEPROM length: 1019
+Start Flash Address: 0x803F800
+[FLASH] REGISTERED_NUMBER_FLASH_SECTORS (KB) = 256
+[FLASH] USING_FLASH_SECTOR_NUMBER =  254
+Number = 0x0
+Done writing to emulated EEPROM. You can reset now
+```
 
 ---
 ---
