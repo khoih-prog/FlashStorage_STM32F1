@@ -458,7 +458,7 @@ Start Flash Address: 0x801FC00
 [FLASH] USING_FLASH_SECTOR_NUMBER =  127
 EEPROM has been written.Signature = 0xBEEFDEED
 Here is the content of the next 16 bytes:
--> 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119
+-> 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 11913
 Clearing WRITTEN_SIGNATURE for next try
 Done clearing signature in emulated EEPROM. You can reset now
 ```
@@ -468,6 +468,20 @@ Done clearing signature in emulated EEPROM. You can reset now
 ### 5. FlashStoreAndRetrieve on GENERIC_F103RCTX with 256KB Flash
 
 The following is the sample terminal output when running example [FlashStoreAndRetrieve](examples/FlashStoreAndRetrieve) on STM32F1 GENERIC_F103RCTX with 2564KB Flash
+
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/FlashStorage_STM32F1/blob/main/pics/STM32F103RCT6.jpg">
+</p>
+
+
+|STLink|<--->|GENERIC_F103RCTX|
+|:-:|:-:|:-:|
+|SWCLK|<--->|SWCLK / PA14|
+|SWDIO|<--->|SWDIO / PA13|
+|GND|<--->|GND|
+|3.3v|<--->|3.3V|
+
 
 #### 5.1 First Start
 
