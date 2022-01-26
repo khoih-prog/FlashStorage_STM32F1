@@ -1,5 +1,5 @@
 /******************************************************************************************************************************************
-  FlashStorage_STM32F151.h
+  FlashStorage_STM32F1.hpp
   For STM32F1 using Flash emulated-EEPROM
 
   The FlashStorage_STM32F1 library aims to provide a convenient way to store and retrieve user's data using the non-volatile flash memory
@@ -22,113 +22,326 @@
   You should have received a copy of the GNU Lesser General Public License along with this library. 
   If not, see (https://www.gnu.org/licenses/)
   
-  Version: 1.0.0
+  Version: 1.1.0
 
   Version Modified By   Date        Comments
   ------- -----------  ----------   -----------
   1.0.0   K Hoang      16/08/2021  Initial coding to support to STM32F1
+  1.0.1   K Hoang      17/08/2021  Fix bug
+  1.1.0   K Hoang      25/01/2022  Fix `multiple-definitions` linker error
  ******************************************************************************************************************************************/
 
 #pragma once
 
-
 #ifndef FlashStorage_STM32F1_hpp
 #define FlashStorage_STM32F1_hpp
 
+#if !( defined(STM32F1xx) || defined(STM32F3xx) )
+  #error This code is intended to run on STM32F1/F3 platform! Please check your Tools->Board setting.  
+#endif
 
-FlashClass::FlashClass(const void *flash_addr, uint32_t size) :
-  PAGE_SIZE(1024),
-  PAGES(1),
-  MAX_FLASH(PAGE_SIZE * PAGES),
-  ROW_SIZE(MAX_FLASH / 64),
-  flash_address((volatile void *)flash_addr),
-  flash_size(size)
-{
-}
+#ifndef FLASH_STORAGE_STM32F1_VERSION
+  #define FLASH_STORAGE_STM32F1_VERSION             "FlashStorage_STM32F1 v1.1.0"
 
-//////////////////////////////////////////////////////////
+  #define FLASH_STORAGE_STM32F1_VERSION_MAJOR       1
+  #define FLASH_STORAGE_STM32F1_VERSION_MINOR       1
+  #define FLASH_STORAGE_STM32F1_VERSION_PATCH       0
 
-void FlashClass::write(const volatile void *flash_ptr, const void *data)
-{
-  uint16_t *AddressPtr;
-  uint16_t *valuePtr;
-  
-  AddressPtr  = (uint16_t *)flash_ptr;
-  valuePtr    = (uint16_t *)data;
-  
-  // we're using 16 bit words here while flash_size in bytes 
-  uint32_t size = flash_size / 2;
-    
-  while (size)
-  {
-    // unlock the flash
-    // Key 1 : 0x45670123
-    // Key 2 : 0xCDEF89AB
-    FLASH->KEYR = FLASH_KEY1;
-    FLASH->KEYR = FLASH_KEY2;
-    FLASH->CR &= ~(1 << 1); // ensure PER is low
-    FLASH->CR |= (1 << 0);  // set the PG bit
-    *(AddressPtr) = *(valuePtr);
+#define FLASH_STORAGE_STM32F1_VERSION_INT           1001000
 
-    while (FLASH->SR & (1 << 0)); // wait while busy
+#endif
 
-    if (FLASH->SR & (1 << 2))
-    {
-      FLASH_LOGDEBUG(F("Flash not erased"));
-      return;
-    }
+#include <Arduino.h>
 
-    if (FLASH->SR & (1 << 4))
-    {
-      FLASH_LOGDEBUG(F("Write protect error"));
-      return;
-    }
+/////////////////////////////////////////////////////
 
-    AddressPtr++;
-    valuePtr++;
-    size--;
-  }
-}
+#ifndef FLASH_DEBUG
+  #define FLASH_DEBUG               0
+#endif
 
-//////////////////////////////////////////////////////////
+#if !defined(FLASH_DEBUG_OUTPUT)
+  #define FLASH_DEBUG_OUTPUT    Serial
+#endif
 
-void FlashClass::erase(const volatile void *flash_ptr)
-{
-  // unlock the flash
-  // Key 1 : 0x45670123
-  // Key 2 : 0xCDEF89AB
-  FLASH->KEYR = FLASH_KEY1;
-  FLASH->KEYR = FLASH_KEY2;
-  FLASH->CR &= ~(1 << 0); // Ensure PG bit is low
-  FLASH->CR |= (1 << 1);  // set the PER bit
-  FLASH->AR = (uint32_t) flash_ptr;
-  FLASH->CR |= (1 << 6);  // set the start bit
+const char FLASH_MARK[]  = "[FLASH] ";
+const char FLASH_SP[]    = " ";
 
-  while (FLASH->SR & (1 << 0)); // wait while busy
-}
+#define FLASH_PRINT          FLASH_DEBUG_OUTPUT.print
+#define FLASH_PRINTLN        FLASH_DEBUG_OUTPUT.println
+#define FLASH_FLUSH          FLASH_DEBUG_OUTPUT.flush
+
+#define FLASH_PRINT_MARK     FLASH_PRINT(FLASH_MARK)
+#define FLASH_PRINT_SP       FLASH_PRINT(FLASH_SP)
+
+/////////////////////////////////////////////////////
+
+#define FLASH_LOGERROR(x)         if(FLASH_DEBUG>0) { FLASH_PRINT("[FLASH] "); FLASH_PRINTLN(x); }
+#define FLASH_LOGERROR0(x)        if(FLASH_DEBUG>0) { FLASH_PRINT(x); }
+#define FLASH_HEXLOGERROR0(x)     if(FLASH_DEBUG>0) { FLASH_PRINTLN(x, HEX); }
+#define FLASH_LOGERROR1(x,y)      if(FLASH_DEBUG>0) { FLASH_PRINT("[FLASH] "); FLASH_PRINT(x); FLASH_PRINT_SP; FLASH_PRINTLN(y); }
+#define FLASH_LOGERROR2(x,y,z)    if(FLASH_DEBUG>0) { FLASH_PRINT("[FLASH] "); FLASH_PRINT(x); FLASH_PRINT_SP; FLASH_PRINT(y); FLASH_PRINT_SP; FLASH_PRINTLN(z); }
+#define FLASH_LOGERROR3(x,y,z,w)  if(FLASH_DEBUG>0) { FLASH_PRINT("[FLASH] "); FLASH_PRINT(x); FLASH_PRINT_SP; FLASH_PRINT(y); FLASH_PRINT_SP; FLASH_PRINT(z); FLASH_PRINT_SP; FLASH_PRINTLN(w); }
+
+/////////////////////////////////////////////////////
+
+#define FLASH_LOGDEBUG(x)         if(FLASH_DEBUG>1) { FLASH_PRINT("[FLASH] "); FLASH_PRINTLN(x); }
+#define FLASH_LOGDEBUG0(x)        if(FLASH_DEBUG>1) { FLASH_PRINT(x); }
+#define FLASH_HEXLOGDEBUG0(x)     if(FLASH_DEBUG>1) { FLASH_PRINTLN(x, HEX); }
+#define FLASH_LOGDEBUG1(x,y)      if(FLASH_DEBUG>1) { FLASH_PRINT("[FLASH] "); FLASH_PRINT(x); FLASH_PRINT_SP; FLASH_PRINTLN(y); }
+#define FLASH_LOGDEBUG2(x,y,z)    if(FLASH_DEBUG>1) { FLASH_PRINT("[FLASH] "); FLASH_PRINT(x); FLASH_PRINT_SP; FLASH_PRINT(y); FLASH_PRINT_SP; FLASH_PRINTLN(z); }
+#define FLASH_LOGDEBUG3(x,y,z,w)  if(FLASH_DEBUG>1) { FLASH_PRINT("[FLASH] "); FLASH_PRINT(x); FLASH_PRINT_SP; FLASH_PRINT(y); FLASH_PRINT_SP; FLASH_PRINT(z); FLASH_PRINT_SP; FLASH_PRINTLN(w); }
+
 
 //////////////////////////////////////////////////////////
 
-void FlashClass::read(const volatile void *flash_ptr, void *data)
+class FlashClass 
 {
-  uint16_t *AddressPtr;
-  uint16_t *valuePtr;
+public:
+  FlashClass(const void *flash_addr = NULL, const uint32_t& size = 0);
+
+  void write(const void *data) { write(flash_address, data); }
+  void erase()                 { erase(flash_address);       }
+  void read(void *data)        { read(flash_address, data);  }
+
+  void write(const volatile void *flash_ptr, const void *data);
   
-  AddressPtr  = (uint16_t *) flash_ptr;
-  valuePtr    = (uint16_t *) data;
+  void read(const volatile void *flash_ptr, void *data);
+
+private:
+  void erase(const volatile void *flash_ptr);
+
+  const uint32_t PAGE_SIZE, PAGES, MAX_FLASH, ROW_SIZE;
+  const volatile void *flash_address;
+  const uint32_t flash_size;
+};
+
+//////////////////////////////////////////////////////////
+
+template<class T>
+class FlashStorageClass
+{
+public:
+  FlashStorageClass(const void *flash_addr) : flash(flash_addr, sizeof(T)) { };
+
+  // Write data into flash memory
+  inline void write(T &data)  { flash.erase(); flash.write(&data); }
+
+  // Read data from flash memory.
+  inline void read(T &data)  { flash.read(&data); }
+
+private:
+  FlashClass flash;
+};
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+#ifndef EEPROM_EMULATION_SIZE
+  #define EEPROM_EMULATION_SIZE ( 1024 - sizeof(bool) - sizeof(uint32_t) )
+#endif
+
+const uint32_t STM32F1_EEPROM_EMULATION_SIGNATURE = 0xFEEDDEED;
+
+typedef struct 
+{
+  byte data[EEPROM_EMULATION_SIZE];
+  bool valid;
+  uint32_t signature;
+} EEPROM_EMULATION;
+
+
+//////////////////////////////////////////////////////////
+
+#define REGISTERED_NUMBER_FLASH_SECTORS       (*((uint16_t *) FLASH_SIZE_DATA_REGISTER))
+
+#if !defined(USING_FLASH_SECTOR_NUMBER)
+  #define USING_FLASH_SECTOR_NUMBER           (REGISTERED_NUMBER_FLASH_SECTORS - 1)
+#endif
+
+#define START_FLASH_ADDRESS                   0x8000000
+
+#define START_FLASH_STORAGE_ADDRESS           (START_FLASH_ADDRESS + USING_FLASH_SECTOR_NUMBER * 1024) 
+
+static FlashStorageClass<EEPROM_EMULATION> eeprom_storage( (const void *) (START_FLASH_STORAGE_ADDRESS) );
+
+//////////////////////////////////////////////////////////
+
+class EEPROMClass 
+{
+  public:
    
-  // we're using 16 bit words here while flash_size in bytes 
-  uint32_t size = flash_size / 2;
- 
-  while (size)
-  {
-    *((uint16_t *)valuePtr) = *((uint16_t *)AddressPtr);
+    //////////////////////////////////////////////////////////
 
-    valuePtr++;
-    AddressPtr++;
-    size--;
-  } 
-}
+    EEPROMClass() : _initialized(false), _dirty(false), _commitASAP(true)  
+    {
+      // Empty
+    }
 
-#endif      //#ifndef FlashStorage_STM32F1_hpp
+    //////////////////////////////////////////////////////////
 
+    uint8_t read(const int& address)
+    {
+      if (!_initialized) 
+        init();
+        
+      return _eeprom.data[address];
+    }
+
+    //////////////////////////////////////////////////////////
+
+    void update(const int& address, const uint8_t& value)
+    {
+      if (!_initialized) 
+        init();
+        
+      if (_eeprom.data[address] != value) 
+      {
+        _dirty = true;
+        _eeprom.data[address] = value;
+      }
+    }
+
+    //////////////////////////////////////////////////////////
+
+    void write(const int& address, const uint8_t& value)
+    {
+      update(address, value);
+    }
+
+    //////////////////////////////////////////////////////////
+
+    void init()
+    {
+      FLASH_LOGDEBUG0(F("Start Flash Address: 0x")); FLASH_HEXLOGDEBUG0((uint32_t) START_FLASH_STORAGE_ADDRESS);
+      FLASH_LOGDEBUG1(F("REGISTERED_NUMBER_FLASH_SECTORS (KB) ="), REGISTERED_NUMBER_FLASH_SECTORS);
+      FLASH_LOGDEBUG1(F("USING_FLASH_SECTOR_NUMBER = "), USING_FLASH_SECTOR_NUMBER);
+
+      // Use reference
+      eeprom_storage.read(_eeprom);
+      
+      if (_eeprom.signature != STM32F1_EEPROM_EMULATION_SIGNATURE)
+      {
+        memset(_eeprom.data, 0xFF, EEPROM_EMULATION_SIZE);
+        _eeprom.signature = STM32F1_EEPROM_EMULATION_SIGNATURE;
+      }
+      
+      _eeprom.valid = true;
+       
+      _initialized = true;
+    }
+
+    //////////////////////////////////////////////////////////
+     
+    /**
+     * Read from eeprom cells to an object
+    * @param index
+    * @param value
+    */
+    //Functionality to 'get' data to objects to from EEPROM.
+    template< typename T > T& get( const int& idx, T &t )
+    {       
+      // Copy the data from the flash to the buffer if not yet
+      if (!_initialized) 
+        init();
+        
+      uint16_t offset = idx;
+      uint8_t* _pointer = (uint8_t *) &t;
+      
+      for ( uint16_t count = sizeof(T) ; count ; --count, ++offset )
+      {  
+        *_pointer++ = _eeprom.data[offset];
+      }
+        
+      return t;
+    }
+
+    //////////////////////////////////////////////////////////
+
+    /**
+    * Read from eeprom cells to an object
+    * @param index
+    * @param value
+    */
+    //Functionality to 'get' data to objects to from EEPROM.
+    template< typename T > const T& put( const int& idx, const T &t )
+    {            
+      // Copy the data from the flash to the buffer if not yet
+      if (!_initialized) 
+        init();
+      
+      uint16_t offset = idx;
+         
+      const uint8_t* _pointer = (const uint8_t *) &t;
+      
+      for ( uint16_t count = sizeof(T) ; count ; --count, ++offset )
+      {              
+        _eeprom.data[offset] = *_pointer++;
+      }
+
+      if (_commitASAP)
+      {
+        _dirty = false;
+        _eeprom.valid = true;
+        // Save the data from the buffer
+        eeprom_storage.write(_eeprom);
+      }
+      else  
+      {
+        // Delay saving the data from the buffer to the flash. Just flag and wait for commit() later
+        _dirty = true;    
+      }
+           
+      return t;
+    }
+
+    //////////////////////////////////////////////////////////
+
+    bool isValid()
+    {
+      if (!_initialized) 
+        init();
+        
+      return _eeprom.valid;
+    }
+
+    //////////////////////////////////////////////////////////
+
+    void commit()
+    {
+      if (!_initialized) 
+        init();
+        
+      if (_dirty) 
+      {
+        _dirty = false;
+        _eeprom.valid = true;
+        // Save the data from the buffer
+        eeprom_storage.write(_eeprom);
+      }
+    }
+
+    //////////////////////////////////////////////////////////
+  
+    uint16_t length() { return EEPROM_EMULATION_SIZE; }
+    
+    //////////////////////////////////////////////////////////
+    
+    void setCommitASAP(bool value = true) { _commitASAP = value; }
+    
+    //////////////////////////////////////////////////////////
+    
+    bool getCommitASAP() { return _commitASAP; }
+
+    //////////////////////////////////////////////////////////
+    
+  private:
+    bool _initialized;
+    EEPROM_EMULATION _eeprom;
+    bool _dirty;
+    bool _commitASAP;
+};
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+static EEPROMClass EEPROM;
+     
+#endif    //#ifndef FlashStorage_STM32F1_hpp

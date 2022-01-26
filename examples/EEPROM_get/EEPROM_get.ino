@@ -21,13 +21,6 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
   You should have received a copy of the GNU Lesser General Public License along with this library.
   If not, see (https://www.gnu.org/licenses/)
-
-  Version: 1.0.1
-
-  Version Modified By   Date        Comments
-  ------- -----------  ----------   -----------
-  1.0.0   K Hoang      16/08/2021  Initial coding to support to STM32F1
-  1.0.1   K Hoang      16/08/2021  Fix mistake in initial releases
  ******************************************************************************************************************************************/
 /***
     eeprom_get example.
@@ -51,6 +44,7 @@
 // Default is (REGISTERED_NUMBER_FLASH_SECTORS - 1) if you don't specify here
 #define USING_FLASH_SECTOR_NUMBER           (REGISTERED_NUMBER_FLASH_SECTORS - 2)
 
+// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
 #include <FlashStorage_STM32F1.h>
 
 const int WRITTEN_SIGNATURE = 0xBEEFDEED;
@@ -100,7 +94,7 @@ void setup()
 
   // Check signature at address 0
   int signature;
-  
+
   float f;
   int eeAddress;
 
@@ -115,15 +109,15 @@ void setup()
 
     f = 123.456f;  //Variable to store in EEPROM.
     eeAddress = START_ADDRESS + sizeof(WRITTEN_SIGNATURE);   //Location we want the data to be put.
-  
+
     //One simple call, with the address first and the object second.
     EEPROM.put(eeAddress, f);
-  
+
     Serial.print("Float written to EEPROM: ");
     Serial.println(f, 3);
-  
+
     /** Put is designed for use with custom structures also. **/
-  
+
     //Data to store.
     MyObject customVar =
     {
@@ -131,9 +125,9 @@ void setup()
       65,
       "Working!"
     };
-  
+
     eeAddress += sizeof(float); //Move address to the next byte after float 'f'.
-  
+
     EEPROM.put(eeAddress, customVar);
 
     if (!EEPROM.getCommitASAP())
@@ -141,7 +135,7 @@ void setup()
       Serial.println("CommitASAP not set. Need commit()");
       EEPROM.commit();
     }
-    
+
     Serial.println("Done writing custom object to EEPROM: ");
     printMyObject(customVar);
     Serial.println("Reset to see how you can retrieve the values by using EEPROM_get!");
@@ -149,16 +143,16 @@ void setup()
   else
   {
     Serial.println("EEPROM has valid data with WRITTEN_SIGNATURE. Now read some example data");
-    
+
     f = 0.00f;   //Variable to store data read from EEPROM.
     eeAddress = START_ADDRESS + sizeof(WRITTEN_SIGNATURE); //EEPROM address to start reading from
-  
+
     Serial.print("Read float from EEPROM: ");
-  
+
     //Get the float data from the EEPROM at position 'eeAddress'
     EEPROM.get(eeAddress, f);
     Serial.println(f, 3);    //This may print 'ovf, nan' if the data inside the EEPROM is not a valid float.
-   
+
     secondTest(); //Run the next test.
   }
 }

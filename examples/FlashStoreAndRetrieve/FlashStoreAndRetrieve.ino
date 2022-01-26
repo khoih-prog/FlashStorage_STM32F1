@@ -21,13 +21,6 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
   You should have received a copy of the GNU Lesser General Public License along with this library.
   If not, see (https://www.gnu.org/licenses/)
-
-  Version: 1.0.1
-
-  Version Modified By   Date        Comments
-  ------- -----------  ----------   -----------
-  1.0.0   K Hoang      16/08/2021  Initial coding to support to STM32F1
-  1.0.1   K Hoang      16/08/2021  Fix mistake in initial releases
  ******************************************************************************************************************************************/
 
 // Use 0-2. Larger for more debugging messages
@@ -37,7 +30,8 @@
 // Default is (REGISTERED_NUMBER_FLASH_SECTORS - 1) if you don't specify here
 #define USING_FLASH_SECTOR_NUMBER           (REGISTERED_NUMBER_FLASH_SECTORS - 2)
 
-#include <FlashStorage_STM32F1.h>
+// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
+#include "FlashStorage_STM32F1.h"
 
 // Note: the area of flash memory reserved for the variable is
 // lost every time the sketch is uploaded on the board.

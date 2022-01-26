@@ -21,13 +21,6 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
   You should have received a copy of the GNU Lesser General Public License along with this library.
   If not, see (https://www.gnu.org/licenses/)
-
-  Version: 1.0.1
-
-  Version Modified By   Date        Comments
-  ------- -----------  ----------   -----------
-  1.0.0   K Hoang      16/08/2021  Initial coding to support to STM32F1
-  1.0.1   K Hoang      16/08/2021  Fix mistake in initial releases
  ******************************************************************************************************************************************/
 
 // Demonstrate how to use FlashAsEEPROM_STM32F1 with an API that is similar to the EEPROM library.
@@ -39,6 +32,7 @@
 // Default is (REGISTERED_NUMBER_FLASH_SECTORS - 1) if you don't specify here
 #define USING_FLASH_SECTOR_NUMBER           (REGISTERED_NUMBER_FLASH_SECTORS - 2)
 
+// To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
 #include <FlashStorage_STM32F1.h>
 
 const int WRITTEN_SIGNATURE = 0xBEEFDEED;
