@@ -1,6 +1,6 @@
 /****************************************************************************************************************************
   multiFileProject.ino
-  
+
   For STM32F1 using Flash emulated-EEPROM
 
   The FlashStorage_STM32F1 library aims to provide a convenient way to store and retrieve user's data using the non-volatile flash memory
@@ -18,7 +18,7 @@
 // The .h contains implementations, and can be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
 
 #if !( defined(STM32F1xx) || defined(STM32F3xx) )
-  #error This code is intended to run on STM32F1/F3 platform! Please check your Tools->Board setting.  
+  #error This code is intended to run on STM32F1/F3 platform! Please check your Tools->Board setting.
 #endif
 
 #define FLASH_STORAGE_STM32F1_VERSION_MIN_TARGET      "FlashStorage_STM32F1 v1.1.0"
@@ -29,26 +29,29 @@
 
 #include "multiFileProject.h"
 
-void setup() 
+void setup()
 {
   Serial.begin(115200);
+
   while (!Serial);
-  
+
   Serial.println("\nStart multiFileProject");
   Serial.println(FLASH_STORAGE_STM32F1_VERSION);
 
 #if defined(FLASH_STORAGE_STM32F1_VERSION_MIN)
+
   if (FLASH_STORAGE_STM32F1_VERSION_INT < FLASH_STORAGE_STM32F1_VERSION_MIN)
   {
     Serial.print("Warning. Must use this example on Version equal or later than : ");
     Serial.println(FLASH_STORAGE_STM32F1_VERSION_MIN_TARGET);
   }
+
 #endif
 
   testEEPROM();
 }
 
-void loop() 
+void loop()
 {
   // put your main code here, to run repeatedly:
 }

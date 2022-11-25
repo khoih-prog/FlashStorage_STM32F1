@@ -46,11 +46,13 @@ byte value;
 void setup()
 {
   Serial.begin(115200);
+
   while (!Serial);
 
   delay(200);
 
-  Serial.print(F("\nStart EEPROM_read on ")); Serial.println(BOARD_NAME);
+  Serial.print(F("\nStart EEPROM_read on "));
+  Serial.println(BOARD_NAME);
   Serial.println(FLASH_STORAGE_STM32F1_VERSION);
 
   Serial.print("EEPROM length: ");
@@ -59,7 +61,7 @@ void setup()
   EEPROM.init();
 }
 
-void loop() 
+void loop()
 {
   // read a byte from the current address of the EEPROM
   value = EEPROM.read(address);
@@ -68,8 +70,8 @@ void loop()
   Serial.print("\t");
   Serial.print(value, DEC);
   Serial.println();
- 
-  if (++address == EEPROM.length()) 
+
+  if (++address == EEPROM.length())
   {
     address = 0;
   }

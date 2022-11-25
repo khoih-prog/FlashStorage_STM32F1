@@ -51,11 +51,13 @@ int address = 0;
 void setup()
 {
   Serial.begin(115200);
+
   while (!Serial);
 
   delay(200);
 
-  Serial.print(F("\nStart EEPROM_read on ")); Serial.println(BOARD_NAME);
+  Serial.print(F("\nStart EEPROM_read on "));
+  Serial.println(BOARD_NAME);
   Serial.println(FLASH_STORAGE_STM32F1_VERSION);
 
   Serial.print("EEPROM length: ");
@@ -67,12 +69,12 @@ void setup()
 void loop()
 {
   unsigned long startMillis = millis();
-  
-  for (int i = 0 ; i < EEPROM.length() ; i++) 
+
+  for (int i = 0 ; i < EEPROM.length() ; i++)
   {
     /***
       The function EEPROM.update(address, val) is equivalent to the following:
-  
+
       if( EEPROM.read(address) != val )
       {
         EEPROM.write(address, val);
@@ -80,10 +82,11 @@ void loop()
     ***/
     EEPROM.update(i, (uint8_t) analogRead(0));
   }
-  
+
   EEPROM.commit();
 
-  Serial.print("Done updating emulated EEPROM. Time spent (ms) = "); Serial.println(millis() - startMillis);
+  Serial.print("Done updating emulated EEPROM. Time spent (ms) = ");
+  Serial.println(millis() - startMillis);
 
   delay(60000);
 }

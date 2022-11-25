@@ -39,11 +39,13 @@
 void setup()
 {
   Serial.begin(115200);
+
   while (!Serial);
 
   delay(200);
 
-  Serial.print(F("\nStart FlashStoreAndRetrieve on ")); Serial.println(BOARD_NAME);
+  Serial.print(F("\nStart FlashStoreAndRetrieve on "));
+  Serial.println(BOARD_NAME);
   Serial.println(FLASH_STORAGE_STM32F1_VERSION);
 
   Serial.print("EEPROM length: ");
@@ -58,7 +60,8 @@ void setup()
   EEPROM.get(address, number);
 
   // Print the current number on the serial monitor
-  Serial.print("Number = 0x"); Serial.println(number, HEX);
+  Serial.print("Number = 0x");
+  Serial.println(number, HEX);
 
   // Save into emulated-EEPROM the number increased by 1 for the next run of the sketch
   EEPROM.put(address, (int) (number + 1));

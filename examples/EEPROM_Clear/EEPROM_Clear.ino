@@ -33,16 +33,18 @@
 // To be included only in main(), .ino with setup() to avoid `Multiple Definitions` Linker Error
 #include <FlashStorage_STM32F1.h>
 
-void setup() 
+void setup()
 {
   Serial.begin(115200);
+
   while (!Serial);
 
   delay(200);
 
-  Serial.print(F("\nStart EEPROM_Clear on ")); Serial.println(BOARD_NAME);
+  Serial.print(F("\nStart EEPROM_Clear on "));
+  Serial.println(BOARD_NAME);
   Serial.println(FLASH_STORAGE_STM32F1_VERSION);
-  
+
   // initialize the LED pin as an output.
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
@@ -53,8 +55,8 @@ void setup()
   EEPROM.init();
 
   unsigned long startMillis = millis();
-  
-  for (int i = 0 ; i < EEPROM.length() ; i++) 
+
+  for (int i = 0 ; i < EEPROM.length() ; i++)
   {
     EEPROM.write(i, 0);
   }
@@ -63,13 +65,14 @@ void setup()
 
   // The time spent can be very short (5-25ms) if the EEPROM is not dirty.
   // For Seeed XIAO, the time is around 22 / 42 ms for 2048 / 4096 bytes of emulated-EEPROM
-  Serial.print("Done clearing emulated EEPROM. Time spent (ms) = "); Serial.println(millis() - startMillis);
+  Serial.print("Done clearing emulated EEPROM. Time spent (ms) = ");
+  Serial.println(millis() - startMillis);
 
   // turn the LED on when we're done
   digitalWrite(LED_BUILTIN, HIGH);
 }
 
-void loop() 
+void loop()
 {
   /** Empty loop. **/
 }

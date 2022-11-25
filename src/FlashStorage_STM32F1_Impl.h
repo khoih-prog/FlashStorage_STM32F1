@@ -9,19 +9,19 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/FlashStorage_STM32F1
   Licensed under LGPLv3 license
-  
+
   Orginally written by A. Christian
-  
+
   Copyright (c) 2015-2016 Arduino LLC.  All right reserved.
   Copyright (c) 2021 Khoi Hoang.
-  
-  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License 
+
+  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
   as published bythe Free Software Foundation, either version 3 of the License, or (at your option) any later version.
   This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
-  You should have received a copy of the GNU Lesser General Public License along with this library. 
+  You should have received a copy of the GNU Lesser General Public License along with this library.
   If not, see (https://www.gnu.org/licenses/)
-  
+
   Version: 1.1.0
 
   Version Modified By   Date        Comments
@@ -54,13 +54,13 @@ void FlashClass::write(const volatile void *flash_ptr, const void *data)
 {
   uint16_t *AddressPtr;
   uint16_t *valuePtr;
-  
+
   AddressPtr  = (uint16_t *)flash_ptr;
   valuePtr    = (uint16_t *)data;
-  
-  // we're using 16 bit words here while flash_size in bytes 
+
+  // we're using 16 bit words here while flash_size in bytes
   uint32_t size = flash_size / 2;
-    
+
   while (size)
   {
     // unlock the flash
@@ -70,7 +70,7 @@ void FlashClass::write(const volatile void *flash_ptr, const void *data)
     FLASH->KEYR = FLASH_KEY2;
     FLASH->CR &= ~(1 << 1); // ensure PER is low
     FLASH->CR |= (1 << 0);  // set the PG bit
-    
+
     *(AddressPtr) = *(valuePtr);
 
     while (FLASH->SR & (1 << 0)); // wait while busy
@@ -116,13 +116,13 @@ void FlashClass::read(const volatile void *flash_ptr, void *data)
 {
   uint16_t *AddressPtr;
   uint16_t *valuePtr;
-  
+
   AddressPtr  = (uint16_t *) flash_ptr;
   valuePtr    = (uint16_t *) data;
-   
-  // we're using 16 bit words here while flash_size in bytes 
+
+  // we're using 16 bit words here while flash_size in bytes
   uint32_t size = flash_size / 2;
- 
+
   while (size)
   {
     *((uint16_t *)valuePtr) = *((uint16_t *)AddressPtr);
@@ -130,7 +130,7 @@ void FlashClass::read(const volatile void *flash_ptr, void *data)
     valuePtr++;
     AddressPtr++;
     size--;
-  } 
+  }
 }
 
 #endif      //#ifndef FlashStorage_STM32F1_Impl_hpp
